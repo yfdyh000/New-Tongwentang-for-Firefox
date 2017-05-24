@@ -13,12 +13,13 @@ let defaultPreference = {
   contextMenuPage2Simp: true,
   contextMenuClip2Trad: true,
   contextMenuClip2Simp: true,
+  contextMenuOptions: true,
   urlFilterEnabled: false,
   urlFilterList: [],
   userPhraseEnable: false,
   userPhraseTradList: {},
   userPhraseSimpList: {},
-  version: 1
+  version: 2
 };
 let supportClipboard = true;
 let menuId = null;
@@ -44,6 +45,9 @@ const loadPreference = () => {
           browser.storage.onChanged.addListener(storageChangeHandler);
         }, err => {
         });
+      } 
+      if (results.version < defaultPreference.version) { // new version; todo: fill object without version
+
       } else {
         preferences = results;
         browser.storage.onChanged.addListener(storageChangeHandler);
@@ -67,6 +71,7 @@ const storageChangeHandler = (changes, area) => {
         case 'contextMenuPage2Simp':
         case 'contextMenuClip2Trad':
         case 'contextMenuClip2Simp':
+        case 'contextMenuOptions':
           resetContextMenu();
           break;
         case 'iconAction':
@@ -281,14 +286,14 @@ const createContextMenu = () => {
     });
   }
 
-  browser.contextMenus.create({
-    parentId: menuId,
-    type: 'separator',
-    contexts: ['all']
-  });
-
   // Options page
-  if (true) { // Reserved for menus configuration
+  if (preferences.contextMenuOptions) {
+    browser.contextMenus.create({
+      parentId: menuId,
+      type: 'separator',
+      contexts: ['all']
+    });
+
     browser.contextMenus.create({
       parentId: menuId,
       type: 'normal',
@@ -313,7 +318,8 @@ const resetContextMenu = () => {
   if (preferences.contextMenuEnabled &&
     (preferences.contextMenuInput2Trad || preferences.contextMenuInput2Simp ||
     preferences.contextMenuPage2Trad || preferences.contextMenuPage2Simp ||
-    ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard)))
+    ((preferences.contextMenuClip2Trad || preferences.contextMenuClip2Simp) && supportClipboard)
+    || preferences.contextMenuOptions))
   {
     createNew = true;
   }

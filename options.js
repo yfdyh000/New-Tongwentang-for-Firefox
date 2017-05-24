@@ -457,7 +457,7 @@ const init = preferences => {
 
   //console.log(JSON.stringify(preferences,null,4));
   currentPrefs = preferences;
-  for(let p in preferences) {
+  for(let p in preferences) { // need for new pref
     setValueToElem(p, preferences[p]);
     handleVelueChange(p, preferences[p]);
   }
