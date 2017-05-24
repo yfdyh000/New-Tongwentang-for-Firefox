@@ -363,6 +363,11 @@
 		"description": ""
 	},
 
+	"contextOptions": {
+		"message": "选项",
+		"description": "Open Options page of the extension"
+	},
+
 	"empty": {
 		"message": "",
 		"description": ""

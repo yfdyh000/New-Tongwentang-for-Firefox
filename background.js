@@ -280,6 +280,32 @@ const createContextMenu = () => {
       }
     });
   }
+
+  browser.contextMenus.create({
+    parentId: menuId,
+    type: 'separator',
+    contexts: ['all']
+  });
+
+  // Options page
+  if (true) { // Reserved for menus configuration
+    browser.contextMenus.create({
+      parentId: menuId,
+      type: 'normal',
+      title: browser.i18n.getMessage('contextOptions'),
+      contexts: ['all'],
+      onclick: () => {
+        function onOpened() {
+          //console.log(`Options page opened`);
+        }
+        function onError(error) {
+          console.log(`Options page opening error: ${error}`);
+        }
+        var opening = browser.runtime.openOptionsPage();
+        opening.then(onOpened, onError);
+      }
+    });
+  }
 }
 
 const resetContextMenu = () => {
